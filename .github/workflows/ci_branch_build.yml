@@ -35,7 +35,7 @@ jobs:
             --env GITHUB_REF="${{ github.ref }}" \
             --env GITHUB_REPOSITORY="${{ github.repository }}" \
             --env GITHUB_WORKFLOW="${{ github.workflow }}" \
-            --env SLACK_CHANNEL=${{ steps.job_info.outputs.repo_name }} \
+            --env SLACK_CHANNEL=platform-activity \
             --env SLACK_COLOR="#3278BD" \
             --env SLACK_INCOMING_WEBHOOK=${{ secrets.SLACK_INCOMING_WEBHOOK }} \
             --env SLACK_MESSAGE="Testing gitactions slack notification" \
