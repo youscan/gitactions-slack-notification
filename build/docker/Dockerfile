@@ -21,7 +21,7 @@ LABEL "com.github.actions.color"="purple"
 LABEL "com.github.actions.name"="GitActions Slack Notification"
 LABEL "com.github.actions.description"="Send notification to Slack"
 
-COPY --from=builder /go/src/gitactions-slack-notification /usr/bin
+COPY --from=builder /go/src/gitactions-slack-notification/gitactions-slack-notification /gitactions-slack-notification
 COPY --from=builder /go/src/gitactions-slack-notification/LICENSE /
 COPY --from=builder /go/src/gitactions-slack-notification/README.md /
 
@@ -32,4 +32,4 @@ USER gitactions-slack-notification
 
 WORKDIR /home/gitactions-slack-notification
 
-ENTRYPOINT ["gitactions-slack-notification"]
+ENTRYPOINT ["/gitactions-slack-notification"]
