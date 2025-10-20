@@ -13,9 +13,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **BREAKING**: Migrated from Docker Hub to GitHub Container Registry (GHCR)
 - **BREAKING**: Docker image now at `ghcr.io/youscan/gitactions-slack-notification`
 - **BREAKING**: Action reference changed from `bryannice/gitactions-slack-notification` to `youscan/gitactions-slack-notification`
+- Updated Golang from 1.15.6 to 1.25.3
+- Updated Alpine base image from 3.12 to 3.22
 - Updated workflows to use `$GITHUB_OUTPUT` instead of deprecated `::set-output` commands
 - Removed dependency on Docker Hub credentials (now uses `GITHUB_TOKEN`)
 - Updated GitHub Actions dependencies to latest versions
+- Simplified Dockerfile (hardcoded images, renamed build stage to `builder`)
 - Added Dependabot configuration for automated dependency updates
 
 ## [2.0.0] - 2021-01-10
