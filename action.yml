@@ -6,4 +6,4 @@ branding:
   color: 'purple'
 runs:
   using: 'docker'
-  image: 'docker://ghcr.io/youscan/gitactions-slack-notification:2.0.0'
+  image: 'docker://ghcr.io/youscan/gitactions-slack-notification:3.0.0'

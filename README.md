@@ -20,7 +20,7 @@ jobs:
       steps:
       - uses: actions/checkout@master
       - name: Slack Notification Demo
-        uses: youscan/gitactions-slack-notification@2.0.0
+        uses: youscan/gitactions-slack-notification@3.0.0
         env:
           SLACK_INCOMING_WEBHOOK: ${{ secrets.SLACK_INCOMING_WEBHOOK }}
           SLACK_MESSAGE: 'Demo''ing the Slack Notification'
