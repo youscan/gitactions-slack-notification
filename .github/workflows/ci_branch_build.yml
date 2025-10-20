@@ -9,7 +9,7 @@ jobs:
   pushCiBuildDockerImage:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v5
       - name: Set Variables With Build Info
         id: job_info
         run: |
@@ -54,7 +54,7 @@ jobs:
       - name: Persisting log
         id: persisting_log
         if: always()
-        uses: actions/upload-artifact@v1
+        uses: actions/upload-artifact@v4
         with:
           name: workflow_log
           path: build_logs.txt
