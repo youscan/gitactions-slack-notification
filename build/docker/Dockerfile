@@ -9,12 +9,13 @@ COPY . /go/src/gitactions-slack-notification
 
 WORKDIR /go/src/gitactions-slack-notification
 
-RUN go build
+# Build static binary
+RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o gitactions-slack-notification .
 
 # -----------------------------------------------------------------------------
 # Runtime stage
 # -----------------------------------------------------------------------------
-FROM alpine:3.22
+FROM gcr.io/distroless/static:nonroot
 
 LABEL "com.github.actions.icon"="message-square"
 LABEL "com.github.actions.color"="purple"
@@ -25,11 +26,6 @@ COPY --from=builder /go/src/gitactions-slack-notification/gitactions-slack-notif
 COPY --from=builder /go/src/gitactions-slack-notification/LICENSE /
 COPY --from=builder /go/src/gitactions-slack-notification/README.md /
 
-# Create Terraform User
-RUN addgroup -S gitactions-slack-notification && adduser -S gitactions-slack-notification -G gitactions-slack-notification
-
-USER gitactions-slack-notification
-
-WORKDIR /home/gitactions-slack-notification
+USER 65532:65532
 
 ENTRYPOINT ["/gitactions-slack-notification"]
