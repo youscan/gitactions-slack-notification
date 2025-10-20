@@ -14,7 +14,7 @@ RUN go build
 # -----------------------------------------------------------------------------
 # Runtime stage
 # -----------------------------------------------------------------------------
-FROM alpine:3.12
+FROM alpine:3.22
 
 LABEL "com.github.actions.icon"="message-square"
 LABEL "com.github.actions.color"="purple"
