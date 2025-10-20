@@ -1,47 +1,47 @@
 name: CI Build Tests on All Branches Except For Master
 
-on: 
+on:
   push:
-    branches-ignore: 
+    branches-ignore:
       - master
 
 jobs:
   pushCiBuildDockerImage:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v1
-    - name: Set Variables With Build Info
-      id: job_info
-      run: |
-        curl -v -L -u runner:${{ secrets.GITHUB_TOKEN }} -o job_info.json https://api.github.com/repos/${GITHUB_REPOSITORY}/actions/runs/${{ github.run_id }}/jobs
-        echo ::set-output name=branch_name::$(echo ${GITHUB_REF##*/})
-        echo ::set-output name=repo_name::$(echo ${GITHUB_REPOSITORY##*/})
-    - name: Capture environment variables
-      run: printenv
-    - name: Build slack-notification App
-      run: |
+      - uses: actions/checkout@v1
+      - name: Set Variables With Build Info
+        id: job_info
+        run: |
+          curl -v -L -u runner:${{ secrets.GITHUB_TOKEN }} -o job_info.json https://api.github.com/repos/${GITHUB_REPOSITORY}/actions/runs/${{ github.run_id }}/jobs
+          echo ::set-output name=branch_name::$(echo ${GITHUB_REF##*/})
+          echo ::set-output name=repo_name::$(echo ${GITHUB_REPOSITORY##*/})
+      - name: Capture environment variables
+        run: printenv
+      - name: Build slack-notification App
+        run: |
           make \
             DOCKER_IMAGE_NAME=${{ steps.job_info.outputs.repo_name }} \
             GIT_VERSION=${GITHUB_REF##*/} \
             STEP_1_IMAGE=golang:1.15.6-alpine3.12 \
             STEP_2_IMAGE=alpine:3.12 \
             docker-build
-    - name: Test gitactions-slack-notification App
-      run: |
-        docker run --rm \
-          --env GITHUB_ACTION=${{ github.action }} \
-          --env GITHUB_ACTOR=${{ github.actor }} \
-          --env GITHUB_EVENT_NAME=${{ github.event_name }} \
-          --env GITHUB_REF="${{ github.ref }}" \
-          --env GITHUB_REPOSITORY="${{ github.repository }}" \
-          --env GITHUB_WORKFLOW="${{ github.workflow }}" \
-          --env SLACK_CHANNEL=${{ steps.job_info.outputs.repo_name }} \
-          --env SLACK_COLOR="#3278BD" \
-          --env SLACK_INCOMING_WEBHOOK=${{ secrets.SLACK_INCOMING_WEBHOOK }} \
-          --env SLACK_MESSAGE="Testing gitactions slack notification" \
-          --env SLACK_TITLE="Test ${{ steps.job_info.outputs.repo_name }} on commit sha ${{ github.sha }}" \
-          --env SLACK_USERNAME=${{ steps.job_info.outputs.repo_name }} \
-          ${{ steps.job_info.outputs.repo_name }}:${{ steps.job_info.outputs.branch_name }}
+      - name: Test gitactions-slack-notification App
+        run: |
+          docker run --rm \
+            --env GITHUB_ACTION=${{ github.action }} \
+            --env GITHUB_ACTOR=${{ github.actor }} \
+            --env GITHUB_EVENT_NAME=${{ github.event_name }} \
+            --env GITHUB_REF="${{ github.ref }}" \
+            --env GITHUB_REPOSITORY="${{ github.repository }}" \
+            --env GITHUB_WORKFLOW="${{ github.workflow }}" \
+            --env SLACK_CHANNEL=${{ steps.job_info.outputs.repo_name }} \
+            --env SLACK_COLOR="#3278BD" \
+            --env SLACK_INCOMING_WEBHOOK=${{ secrets.SLACK_INCOMING_WEBHOOK }} \
+            --env SLACK_MESSAGE="Testing gitactions slack notification" \
+            --env SLACK_TITLE="Test ${{ steps.job_info.outputs.repo_name }} on commit sha ${{ github.sha }}" \
+            --env SLACK_USERNAME=${{ steps.job_info.outputs.repo_name }} \
+            ${{ steps.job_info.outputs.repo_name }}:${{ steps.job_info.outputs.branch_name }}
   logPullCiBuildDockerImage:
     needs: pushCiBuildDockerImage
     if: always()
