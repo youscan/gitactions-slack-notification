@@ -20,34 +20,24 @@ jobs:
           echo ::set-output name=repo_name::$(echo ${GITHUB_REPOSITORY##*/})
       - name: Capture environment variables
         run: printenv
-      - name: Login to DockerHub
+      - name: Login to GitHub Container Registry
         uses: docker/login-action@v1
         with:
-          username: ${{ secrets.DOCKER_HUB_USERNAME }}
-          password: ${{ secrets.DOCKER_HUB_PASSWORD }}
-      - name: Build
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Build and Push to GHCR
         id: build_and_push
         uses: docker/build-push-action@v2
         with:
-          buil-args: |
+          push: true
+          build-args: |
             STEP_1_IMAGE=golang:1.15.6-alpine3.12
             STEP_2_IMAGE=alpine:3.12
           file: build/docker/Dockerfile
           tags: |
-            bryannice/gitactions-slack-notification:latest
-            bryannice/gitactions-slack-notification:${{ steps.get_tag_name.outputs.tag_name }}
-      - name: Push to docker hub
-        run: |
-          docker push bryannice/gitactions-slack-notification:latest
-          docker push bryannice/gitactions-slack-notification:${{ steps.get_tag_name.outputs.tag_name }}
-      - name: Update Docker Hub Description
-        uses: peter-evans/dockerhub-description@v2.4.1
-        if: success()
-        with:
-          username: ${{ secrets.DOCKER_HUB_USERNAME }}
-          password: ${{ secrets.DOCKER_HUB_PASSWORD }}
-          repository: bryannice/gitactions-slack-notification
-          readme-filepath: README.md
+            ghcr.io/youscan/gitactions-slack-notification:latest
+            ghcr.io/youscan/gitactions-slack-notification:${{ steps.get_tag_name.outputs.tag_name }}
   logPullCiBuildDockerImage:
     needs: pushCiBuildDockerImage
     if: always()

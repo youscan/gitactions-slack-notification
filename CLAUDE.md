@@ -67,11 +67,11 @@ The multi-stage Dockerfile (`build/docker/Dockerfile`) uses:
 ## GitHub Actions Workflows
 
 - **`.github/workflows/ci_branch_build.yml`**: Runs on non-master branches. Builds Docker image via Make, then tests it by sending an actual Slack notification.
-- **`.github/workflows/cd_build_package.yml`**: Runs on version tags (e.g., `1.0.0`). Builds and pushes to Docker Hub with both `latest` and version-specific tags.
+- **`.github/workflows/cd_build_package.yml`**: Runs on version tags (e.g., `1.0.0`). Builds and pushes to GitHub Container Registry (GHCR) with both `latest` and version-specific tags.
 
 ## Usage as a GitHub Action
 
-The action is defined in `action.yml` and uses the published Docker image from Docker Hub. See `deployment/git-actions/template_slack_notification.yml` for a complete example with all available environment variables.
+The action is defined in `action.yml` and uses the published Docker image from GitHub Container Registry (ghcr.io/youscan/gitactions-slack-notification). See `deployment/git-actions/template_slack_notification.yml` for a complete example with all available environment variables.
 
 The action constructs messages with GitHub metadata automatically, creating a formatted Slack attachment that shows:
 - Author (GitHub actor) with profile picture
