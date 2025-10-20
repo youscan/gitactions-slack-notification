@@ -14,8 +14,8 @@ jobs:
         id: job_info
         run: |
           curl -v -L -u runner:${{ secrets.GITHUB_TOKEN }} -o job_info.json https://api.github.com/repos/${GITHUB_REPOSITORY}/actions/runs/${{ github.run_id }}/jobs
-          echo ::set-output name=branch_name::$(echo ${GITHUB_REF##*/})
-          echo ::set-output name=repo_name::$(echo ${GITHUB_REPOSITORY##*/})
+          echo "branch_name=$(echo ${GITHUB_REF##*/})" >> $GITHUB_OUTPUT
+          echo "repo_name=$(echo ${GITHUB_REPOSITORY##*/})" >> $GITHUB_OUTPUT
       - name: Capture environment variables
         run: printenv
       - name: Build slack-notification App
