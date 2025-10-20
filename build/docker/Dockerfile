@@ -3,14 +3,18 @@
 # -----------------------------------------------------------------------------
 FROM golang:1.25.3 AS builder
 
+# Buildx automatic platform args
+ARG TARGETOS
+ARG TARGETARCH
+
 RUN mkdir -p git gitactions-slack-notification
 
 COPY . /go/src/gitactions-slack-notification
 
 WORKDIR /go/src/gitactions-slack-notification
 
-# Build static binary
-RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o gitactions-slack-notification .
+# Build static binary for target platform
+RUN CGO_ENABLED=0 GOOS=${TARGETOS} GOARCH=${TARGETARCH} go build -o gitactions-slack-notification .
 
 # -----------------------------------------------------------------------------
 # Runtime stage
