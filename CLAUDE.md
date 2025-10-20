@@ -12,7 +12,7 @@ This is a GitHub Action that sends Slack notifications about workflow statuses. 
 ```bash
 make docker-build
 ```
-This builds the Docker image using a multi-stage build with Go 1.15.6 and Alpine 3.12.
+This builds the Docker image using a multi-stage build with Go 1.15.6 (alpine3.12) and Alpine 3.18.
 
 ### Formatting Go code
 ```bash
@@ -30,6 +30,8 @@ Formats code and builds the Go binary locally without Docker.
 ```bash
 make DOCKER_IMAGE_NAME=custom-name GIT_VERSION=1.0.0 docker-build
 ```
+
+Note: The Dockerfile now has hardcoded base images (no ARG variables needed).
 
 ## Architecture
 
@@ -61,8 +63,10 @@ All other environment variables (GitHub context, Slack customization) are option
 ## Docker Build Process
 
 The multi-stage Dockerfile (`build/docker/Dockerfile`) uses:
-1. **Stage 1**: golang:1.15.6-alpine3.12 to compile the Go binary
-2. **Stage 2**: alpine:3.12 as minimal runtime, copies binary and runs as non-root user `gitactions-slack-notification`
+1. **Build stage** (named `builder`): golang:1.15.6-alpine3.12 to compile the Go binary
+2. **Runtime stage**: alpine:3.18 as minimal runtime, copies binary and runs as non-root user `gitactions-slack-notification`
+
+Base images are hardcoded in the Dockerfile (no build-arg variables).
 
 ## GitHub Actions Workflows
 

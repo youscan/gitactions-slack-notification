@@ -29,8 +29,6 @@ GIT_VERSION_LONG := $(shell git describe --always --tags --long --dirty)
 # Docker Variables
 # -----------------------------------------------------------------------------
 
-STEP_1_IMAGE ?= golang:1.15.6-alpine3.12
-STEP_2_IMAGE ?= alpine:3.12
 DOCKER_IMAGE_TAG ?= $(GIT_REPOSITORY_NAME):$(GIT_VERSION)
 DOCKER_IMAGE_NAME := $(GIT_REPOSITORY_NAME)
 
@@ -48,8 +46,6 @@ DOCKER_IMAGE_NAME := $(GIT_REPOSITORY_NAME)
 docker-build: docker-rmi-for-build
 	@echo "$(BOLD)$(YELLOW)Building docker image.$(RESET)"
 	@docker build \
-		--build-arg STEP_1_IMAGE=$(STEP_1_IMAGE) \
-		--build-arg STEP_2_IMAGE=$(STEP_2_IMAGE) \
 		--tag $(DOCKER_IMAGE_NAME) \
 		--tag $(DOCKER_IMAGE_NAME):$(GIT_VERSION) \
 		--file build/docker/Dockerfile \
@@ -60,8 +56,6 @@ docker-build: docker-rmi-for-build
 docker-build-development-cache: docker-rmi-for-build-development-cache
 	@echo "$(BOLD)$(YELLOW)Building docker image.$(RESET)"
 	@docker build \
-		--build-arg STEP_1_IMAGE=$(STEP_1_IMAGE) \
-		--build-arg STEP_2_IMAGE=$(STEP_2_IMAGE) \
 		--tag $(DOCKER_IMAGE_TAG) \
 		--file build/docker/Dockerfile \
 		.
