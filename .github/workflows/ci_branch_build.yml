@@ -9,7 +9,7 @@ jobs:
   pushCiBuildDockerImage:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - name: Set Variables With Build Info
         id: job_info
         run: |
