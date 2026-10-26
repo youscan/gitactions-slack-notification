@@ -1,7 +1,7 @@
 # -----------------------------------------------------------------------------
 # Build stage
 # -----------------------------------------------------------------------------
-FROM golang:1.25.6 AS builder
+FROM golang:1.27.3 AS builder
 
 # Buildx automatic platform args
 ARG TARGETOS
